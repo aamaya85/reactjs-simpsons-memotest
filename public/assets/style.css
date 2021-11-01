@@ -1,0 +1,30 @@
+* {
+    box-sizing: border-box;
+}
+
+.board {
+    margin: 0 auto;
+    width: 720px;
+    border: 1px solid lightgray;
+    box-shadow: 0px 0px 8px 0px gray;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+    /* background-image: url("/assets/bg.jpg");
+    background-size: cover */
+}
+
+.card {
+    padding: 10px;
+    flex: 1;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+}
+
+.card img {
+    width: 100%;
+    box-shadow: 0px 0px 5px 0px gray;
+}
