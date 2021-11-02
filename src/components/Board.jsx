@@ -27,50 +27,82 @@ const Board = () => {
         const dupAvatars = avatars.concat(avatars);
         let board = [];
         randomOrder(dupAvatars.length)
-            .forEach( (index) => {
+            .forEach( (value, idx) => {
                 board.push({
-                    avatar: dupAvatars[index].src,
-                    name: dupAvatars[index].name,
+                    idx: idx,
+                    avatar: dupAvatars[value].src,
+                    name: dupAvatars[value].name,
                     isFlipped: false,
+                    matched: false,
                 })
             })
         return board
     }
 
     const [cardList, setCardList] = useState(boardGame);
+    const [flippedCards, setFlippedCards] = useState([]);
 
     // Logic Game
-    const flipCard = (idx) => {
-        let flippedCards = [];
-        const updatedCardList = cardList.map((card, index) => {
-            // Chequear que no haya más de dos cartas flipped
-            // Si hay dos cartas flipped, chequear si coinciden
-            // Si hay dos cartas flipped, bloquear acción
-            // Si hay dos cartas flipped, unflip con un timeout
-            // Si hay coincidencia dejar las cartas flipped
+    const playCard = (idx) => {
+        
+        /*
+            1. Setear card como flipped
+            2. Si llegamos a dos cards
+                b. buscamos la coincidencia
+                    1. Hay coincidencia:
+                        - Dejar las cards flipped
+                        - Cambiarles el estilo
+                    2. No hay coincidencia
+                        - reiniciamos el count de flippedCards
+                        - damos vuelta todas las piezas
+            3. renderizar
+        */
 
-            
-
-
-            if (!card.isFlipped) flippedCards.push(card)
-
+        if (flippedCards.length === 2) return false;
+       
+        let updatedCardList = cardList.map((card, index) => {
             if (index === idx) card.isFlipped = !card.isFlipped
             return card
         });
+
+        let updatedFlippedCards = flippedCards;
+        updatedFlippedCards.push(updatedCardList[idx]);
+        setFlippedCards(updatedFlippedCards)
+        
         setCardList(updatedCardList);
+        
+        if (flippedCards.length === 2) {
+            if (flippedCards[0].name === flippedCards[1].name) {
+                setTimeout( () => {
+                    updatedCardList[flippedCards[0].idx].matched = true
+                    updatedCardList[flippedCards[1].idx].matched = true
+                    setCardList(updatedCardList);
+                    setFlippedCards([])
+                }, 750); 
+            } else {
+                setTimeout( () => {
+                    updatedCardList[flippedCards[0].idx].isFlipped = false
+                    updatedCardList[flippedCards[1].idx].isFlipped = false
+                    setCardList(updatedCardList);
+                    setFlippedCards([])
+                }, 1500)
+            }
+        }
+        
     }
 
     return (
         <div className="board">
             {
-                cardList.map( (card, idx) => {
+                cardList.map( (card) => {
                     return (
                         <Card
-                            key = {idx}
-                            idx = {idx}
+                            key = {card.idx}
+                            idx = {card.idx}
                             avatar = {card.avatar}
                             isFlipped = {card.isFlipped}
-                            onFlip = {flipCard}
+                            matched = {card.matched}
+                            onFlip = {playCard}
                         ></Card>
                   )
                 })
