@@ -10,6 +10,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### LIVE DEMO:
 
-https://gorila-testing.tk/memotest/
+https://gorila-testing.tk/memotest/ (not available)
 
 
